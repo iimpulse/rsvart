@@ -1,2 +1,2 @@
 # granchio
-A command line project to help cancer analysis using rust.
+A command line application to help with genomic analysis of regulatory and structural variants
