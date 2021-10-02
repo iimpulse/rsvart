@@ -1,3 +1,7 @@
+use granchio::Bound;
+
 fn main() {
-    println!("Hello, world!");
+    let x = Bound::OPEN;
+    let y = x.is_closed();
+    println!("{}", y);
 }
