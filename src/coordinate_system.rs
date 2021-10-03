@@ -18,11 +18,11 @@ impl CoordinateSystem {
     }
 
     pub fn one_based() -> CoordinateSystem {
-        return CoordinateSystem::FullyClosed;
+        CoordinateSystem::FullyClosed
     }
 
     pub fn zero_based() -> CoordinateSystem {
-        return CoordinateSystem::LeftOpen;
+        CoordinateSystem::LeftOpen
     }
 
     pub fn is_one_based(&self) -> bool {
@@ -63,13 +63,21 @@ impl CoordinateSystem {
         return Option.empty()
     }*/
 }
-
+#[cfg(test)]
 mod test {
     use super::*;
+    use rstest::rstest;
 
     #[rstest]
-    #[case(FullyClosed, true)]
+    #[case(CoordinateSystem::FullyClosed, true)]
+    #[case(CoordinateSystem::LeftOpen, false)]
     fn test_is_one_based(#[case] input: CoordinateSystem, #[case] expected: bool) {
         assert_eq!(input.is_one_based(), expected);
+    }
+    #[rstest]
+    #[case(CoordinateSystem::FullyClosed, false)]
+    #[case(CoordinateSystem::LeftOpen, true)]
+    fn test_is_zero_base(#[case] input: CoordinateSystem, #[case] expected: bool) {
+        assert_eq!(input.is_zero_based(), expected);
     }
 }
