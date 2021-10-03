@@ -9,7 +9,7 @@ pub enum CoordinateSystem {
 
 impl CoordinateSystem {
     fn value(&self) -> (Bound, Bound) {
-        match *self {
+        match self {
             CoordinateSystem::FullyClosed => (Bound::CLOSED, Bound::CLOSED),
             CoordinateSystem::LeftOpen => (Bound::OPEN, Bound::CLOSED),
             CoordinateSystem::RightOpen => (Bound::CLOSED, Bound::OPEN),
@@ -48,18 +48,28 @@ impl CoordinateSystem {
     }
 
     pub fn start_bound(&self) -> Bound {
-        self.value()[0]
+        self.value().0
     }
 
     pub fn end_bound(&self) -> Bound {
-        self.value()[1]
+        self.value().1
     }
 
-    pub fn start_delta(target: CoordinateSystem) -> i32 {
+    /*pub fn start_delta(target: CoordinateSystem) -> i32 {
+        return Option.empty()
+    }*/
 
-    }
+    /*pub fn end_delta(target: CoordinateSystem) -> i32 {
+        return Option.empty()
+    }*/
+}
 
-    pub fn end_delta(target: CoordinateSystem) -> i32 {
+mod test {
+    use super::*;
 
+    #[rstest]
+    #[case(FullyClosed, true)]
+    fn test_is_one_based(#[case] input: CoordinateSystem, #[case] expected: bool) {
+        assert_eq!(input.is_one_based(), expected);
     }
 }
