@@ -1,1 +1,6 @@
-/target
+# build directory
+target/
+
+# IDE
+.idea/
+*.iml
