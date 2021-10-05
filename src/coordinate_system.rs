@@ -35,19 +35,11 @@ impl CoordinateSystem {
     }
 
     pub fn is_one_based(&self) -> bool {
-        // TODO - simple equals?
-        match self {
-            CoordinateSystem::FullyClosed => true,
-            _ => false
-        }
+        *self == CoordinateSystem::FullyClosed
     }
 
     pub fn is_zero_based(&self) -> bool {
-        // TODO - simple equals?
-        match self {
-            CoordinateSystem::LeftOpen => true,
-            _ => false
-        }
+        *self == CoordinateSystem::LeftOpen
     }
 
     pub fn start_bound(&self) -> &Bound {
@@ -117,8 +109,8 @@ mod test {
 
     #[rstest]
     #[case(CoordinateSystem::FullyClosed, CoordinateSystem::FullyClosed, 0)]
-    #[case(CoordinateSystem::FullyClosed, CoordinateSystem::LeftOpen, - 1)]
-    #[case(CoordinateSystem::FullyClosed, CoordinateSystem::FullyOpen, - 1)]
+    #[case(CoordinateSystem::FullyClosed, CoordinateSystem::LeftOpen, -1)]
+    #[case(CoordinateSystem::FullyClosed, CoordinateSystem::FullyOpen, -1)]
     #[case(CoordinateSystem::LeftOpen, CoordinateSystem::LeftOpen, 0)]
     #[case(CoordinateSystem::LeftOpen, CoordinateSystem::FullyClosed, 1)]
     fn test_start_delta(#[case] current: CoordinateSystem, #[case] target: CoordinateSystem, #[case] expected: i8){
@@ -132,7 +124,7 @@ mod test {
     #[case(CoordinateSystem::FullyClosed, CoordinateSystem::RightOpen, 1)]
     #[case(CoordinateSystem::LeftOpen, CoordinateSystem::LeftOpen, 0)]
     #[case(CoordinateSystem::LeftOpen, CoordinateSystem::FullyClosed, 0)]
-    #[case(CoordinateSystem::FullyOpen, CoordinateSystem::FullyClosed, - 1)]
+    #[case(CoordinateSystem::FullyOpen, CoordinateSystem::FullyClosed, -1)]
     fn test_end_delta(#[case] current: CoordinateSystem, #[case] target: CoordinateSystem, #[case] expected: i8) {
         assert_eq!(current.end_delta(&target), expected)
     }
