@@ -1,10 +1,5 @@
 use crate::Bound;
 
-const FULLY_CLOSED: (Bound, Bound) = (Bound::CLOSED, Bound::CLOSED);
-const LEFT_OPEN: (Bound, Bound) = (Bound::OPEN, Bound::CLOSED);
-const RIGHT_OPEN: (Bound, Bound) = (Bound::CLOSED, Bound::OPEN);
-const FULLY_OPEN: (Bound, Bound) = (Bound::OPEN, Bound::OPEN);
-
 const LEFT_OPEN_CS: CoordinateSystem = CoordinateSystem::LeftOpen;
 const FULLY_CLOSED_CS: CoordinateSystem = CoordinateSystem::FullyClosed;
 
@@ -18,11 +13,11 @@ pub enum CoordinateSystem {
 
 impl CoordinateSystem {
     fn value(&self) -> &(Bound, Bound) {
-        match self {
-            CoordinateSystem::FullyClosed => &FULLY_CLOSED,
-            CoordinateSystem::LeftOpen => &LEFT_OPEN,
-            CoordinateSystem::RightOpen => &RIGHT_OPEN,
-            CoordinateSystem::FullyOpen => &FULLY_OPEN,
+        match *self {
+            CoordinateSystem::FullyClosed => &(Bound::CLOSED, Bound::CLOSED),
+            CoordinateSystem::LeftOpen => &(Bound::OPEN, Bound::CLOSED),
+            CoordinateSystem::RightOpen => &(Bound::CLOSED, Bound::OPEN),
+            CoordinateSystem::FullyOpen => &(Bound::OPEN, Bound::OPEN),
         }
     }
 

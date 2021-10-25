@@ -3,6 +3,7 @@ mod coordinate_system;
 mod contig;
 mod err;
 mod default;
+mod strand;
 
 // TODO - think about API structure
 pub use self::bound::*;
