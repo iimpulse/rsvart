@@ -3,6 +3,7 @@ pub enum Strand {
     Positive,
     Negative
 }
+
 impl Strand {
     fn value(&self) -> char {
         match self {

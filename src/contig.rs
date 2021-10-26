@@ -1,6 +1,7 @@
 use std::cmp::Ordering;
 use std::fmt::Debug;
 
+
 pub trait Contig: PartialOrd {
     fn id(&self) -> usize;
     fn name(&self) -> &str;
@@ -76,21 +77,18 @@ impl<T: Contig> PartialOrd<T> for UnknownContig {
     }
 }
 
-// singleton UnknownContig
-const UNKNOWN_CONTIG: UnknownContig = UnknownContig {
-    id: 0,
-    name: "na",
-    sequence_role: SequenceRole::Unknown,
-    assigned_molecule: "na",
-    assigned_molecule_type: AssignedMoleculeType::Unknown,
-    length: 0,
-    gen_bank_accession: "",
-    ref_seq_accession: "",
-    ucsc_name: "na",
-};
-
 pub fn unknown_contig() -> &'static UnknownContig {
-    &UNKNOWN_CONTIG
+    return &UnknownContig {
+        id: 0,
+        name: "na",
+        sequence_role: SequenceRole::Unknown,
+        assigned_molecule: "na",
+        assigned_molecule_type: AssignedMoleculeType::Unknown,
+        length: 0,
+        gen_bank_accession: "",
+        ref_seq_accession: "",
+        ucsc_name: "na",
+    };
 }
 
 // -------------------------------------- SEQUENCE ROLE --------------------------------------------
