@@ -1,32 +1,25 @@
+
+const PRECISE: ConfidenceInterval = ConfidenceInterval { lower_bound: 0, upper_bound: 0};
+
 pub struct ConfidenceInterval {
-    lower_bound: i64,
-    upper_bound: u64
+    // TODO - investigate if it is OK to use unsigned ints for upper/lower bounds
+    upper_bound: u32,
+    lower_bound: u32
 }
 
 impl ConfidenceInterval {
-    pub fn new(lower_bound: i64, upper_bound: u64) -> Self {
-        if lower_bound == 0 && upper_bound == 0 {
-            &ConfidenceInterval {
-                lower_bound: 0,
-                upper_bound: 0
-            }
-        } else {
-            ConfidenceInterval { lower_bound, upper_bound }
-        }
-
+    pub fn imprecise(upper_bound: u32, lower_bound: u32) -> Self {
+        ConfidenceInterval { upper_bound, lower_bound }
     }
 
-    fn precise() -> &ConfidenceInterval {
-        &ConfidenceInterval {
-            lower_bound: 0,
-            upper_bound: 0
-        }
+    pub fn precise() -> &'static ConfidenceInterval {
+        &PRECISE
     }
 
-    fn lower_bound(&self) -> i64 {
+    pub fn lower_bound(&self) -> u32 {
         self.lower_bound
     }
-    fn upper_bound(&self) -> u64 {
+    pub fn upper_bound(&self) -> u32 {
         self.upper_bound
     }
 }
