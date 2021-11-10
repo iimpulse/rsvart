@@ -4,8 +4,9 @@ mod contig;
 mod err;
 mod default;
 mod strand;
-mod genomic_region;
+mod region;
 mod confidence_interval;
+mod genomic_region;
 
 // TODO - think about API structure
 pub use self::bound::*;
