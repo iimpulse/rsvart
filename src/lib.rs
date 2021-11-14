@@ -2,6 +2,7 @@ mod bound;
 mod coordinate_system;
 mod contig;
 mod err;
+mod experimental;
 mod default;
 mod strand;
 mod region;
