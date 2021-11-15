@@ -11,7 +11,10 @@ mod genomic_region;
 
 // TODO - think about API structure
 pub use self::bound::*;
-pub use self::coordinate_system::*;
-pub use self::contig::*;
-pub use self::err::*;
 pub use self::confidence_interval::ConfidenceInterval;
+pub use self::contig::*;
+pub use self::coordinate_system::*;
+pub use self::err::*;
+pub use self::genomic_region::*;
+pub use self::region::*;
+pub use self::strand::*;

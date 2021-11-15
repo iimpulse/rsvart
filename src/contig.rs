@@ -2,7 +2,7 @@ use std::cmp::Ordering;
 use std::fmt::Debug;
 
 
-pub trait Contig: PartialOrd {
+pub trait Contig {
     fn id(&self) -> usize;
     fn name(&self) -> &str;
     fn sequence_role(&self) -> &SequenceRole;
