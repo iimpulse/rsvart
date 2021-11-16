@@ -50,7 +50,7 @@ impl Contig for ContigDefault {
     }
 
     fn name(&self) -> &str {
-        self.name.as_str()
+        &self.name
     }
 
     fn sequence_role(&self) -> &SequenceRole {
@@ -58,7 +58,7 @@ impl Contig for ContigDefault {
     }
 
     fn assigned_molecule(&self) -> &str {
-        self.assigned_molecule.as_str()
+        &self.assigned_molecule
     }
 
     fn assigned_molecule_type(&self) -> &AssignedMoleculeType {
@@ -70,15 +70,15 @@ impl Contig for ContigDefault {
     }
 
     fn gen_bank_accession(&self) -> &str {
-        self.gen_bank_accession.as_str()
+        &self.gen_bank_accession
     }
 
     fn ref_seq_accession(&self) -> &str {
-        self.ref_seq_accession.as_str()
+        &self.ref_seq_accession
     }
 
     fn ucsc_name(&self) -> &str {
-        self.ucsc_name.as_str()
+        &self.ucsc_name
     }
 }
 
