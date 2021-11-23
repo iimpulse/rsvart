@@ -42,13 +42,13 @@ impl Contig {
         self.id
     }
     pub fn name(&self) -> &str {
-        self.name.as_str()
+        &self.name
     }
     pub fn sequence_role(&self) -> &SequenceRole {
         &self.sequence_role
     }
     pub fn assigned_molecule(&self) -> &str {
-        self.assigned_molecule.as_str()
+        &self.assigned_molecule
     }
     pub fn assigned_molecule_type(&self) -> &AssignedMoleculeType {
         &self.assigned_molecule_type
@@ -57,13 +57,13 @@ impl Contig {
         self.length
     }
     pub fn gen_bank_accession(&self) -> &str {
-        self.gen_bank_accession.as_str()
+        &self.gen_bank_accession
     }
     pub fn ref_seq_accession(&self) -> &str {
-        self.ref_seq_accession.as_str()
+        &self.ref_seq_accession
     }
     pub fn ucsc_name(&self) -> &str {
-        self.ucsc_name.as_str()
+        &self.ucsc_name
     }
 
     pub fn is_unknown(&self) -> bool {
