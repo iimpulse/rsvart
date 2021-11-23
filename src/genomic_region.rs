@@ -16,7 +16,7 @@ pub trait GenomicRegion: Region {
 
     // TODO - this is possible, but it introduces an array of lifetimes everywhere
     // fn contig(&'a self) -> &'a dyn Contig;
-    fn contig(&self) -> &Rc<dyn Contig>;
+    fn contig(&self) -> &dyn Contig;
 
     fn strand(&self) -> &Strand;
 

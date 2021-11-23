@@ -8,6 +8,8 @@ mod strand;
 mod region;
 mod confidence_interval;
 mod genomic_region;
+mod variant;
+mod variant_type;
 
 // TODO - think about API structure
 pub use self::bound::*;

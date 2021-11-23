@@ -20,8 +20,8 @@ impl GenomicRegionDefault {
 }
 
 impl GenomicRegion for GenomicRegionDefault {
-    fn contig(&self) -> &Rc<dyn Contig> {
-        &self.contig
+    fn contig(&self) -> &dyn Contig {
+        &*self.contig
     }
 
     fn strand(&self) -> &Strand {
@@ -50,9 +50,9 @@ impl Region for GenomicRegionDefault {
         self.region.end_confidence_interval()
     }
 
-    fn as_precise(self) -> Box<dyn Region> {
-        self.region.as_precise()
-    }
+    // fn as_precise(self) -> Box<dyn Region> {
+    //     self.region.as_precise()
+    // }
 }
 
 impl Debug for GenomicRegionDefault {
