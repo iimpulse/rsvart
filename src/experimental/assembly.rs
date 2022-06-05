@@ -56,7 +56,7 @@ impl GenomicAssembly {
             .collect();
 
         // contig IDs must be consecutive
-        contigs.sort_by(|a, b| a.partial_cmp(&b).unwrap());
+        contigs.sort_by(|a, b| a.id().partial_cmp(&b.id()).unwrap());
         let last_contig = contigs.last().unwrap();
         let last_contig_id = last_contig.id();
         if last_contig_id != contigs.len() - 1 {
@@ -81,9 +81,12 @@ impl GenomicAssembly {
         self.name.as_str()
     }
 
+    // todo - add
+
     pub fn gen_bank_accession(&self) -> &str {
         self.gen_bank_accession.as_str()
     }
+
 
     pub fn contig_by_id(&self, id: usize) -> Option<&Rc<Contig>> {
        self.contigs.get(id)
@@ -144,6 +147,7 @@ mod assembly_tests {
         assert!(one.is_some());
 
         let one = one.unwrap();
+        let one_other = Rc::clone(one);
         assert_eq!(one.id(), 1);
         assert_eq!(one.name(), "1");
         assert_eq!(one.gen_bank_accession(), "CM000663.1");

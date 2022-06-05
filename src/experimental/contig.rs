@@ -86,6 +86,7 @@ impl PartialOrd<Contig> for Contig {
 
 #[cfg(test)]
 mod contig_tests {
+    use std::rc::Rc;
     use crate::contig::{AssignedMoleculeType, SequenceRole};
 
     use super::Contig;
@@ -112,6 +113,7 @@ mod contig_tests {
         assert_eq!(std::mem::size_of::<String>(), 24); // pointer, length, and capacity
 
         assert_eq!(std::mem::size_of::<Contig>(), 144);
+        assert_eq!(std::mem::size_of::<Rc>(), 8);
     }
 
     fn get_contig() -> Contig {
