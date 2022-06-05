@@ -1,23 +1,20 @@
 use crate::Bound;
+use crate::CoordinateSystem::{OneBased, ZeroBased};
 
-const LEFT_OPEN_CS: CoordinateSystem = CoordinateSystem::LeftOpen;
-const FULLY_CLOSED_CS: CoordinateSystem = CoordinateSystem::FullyClosed;
+const LEFT_OPEN_CS: CoordinateSystem = ZeroBased;
+const FULLY_CLOSED_CS: CoordinateSystem = OneBased;
 
 #[derive(Debug, PartialEq)]
 pub enum CoordinateSystem {
-    FullyClosed,
-    LeftOpen,
-    RightOpen,
-    FullyOpen
+    OneBased,
+    ZeroBased
 }
 
 impl CoordinateSystem {
     fn value(&self) -> &(Bound, Bound) {
-        match *self {
-            CoordinateSystem::FullyClosed => &(Bound::CLOSED, Bound::CLOSED),
-            CoordinateSystem::LeftOpen => &(Bound::OPEN, Bound::CLOSED),
-            CoordinateSystem::RightOpen => &(Bound::CLOSED, Bound::OPEN),
-            CoordinateSystem::FullyOpen => &(Bound::OPEN, Bound::OPEN),
+        match self {
+            OneBased => &(Bound::CLOSED, Bound::CLOSED),
+            ZeroBased => &(Bound::OPEN, Bound::CLOSED)
         }
     }
 
@@ -30,11 +27,11 @@ impl CoordinateSystem {
     }
 
     pub fn is_one_based(&self) -> bool {
-        *self == CoordinateSystem::FullyClosed
+        self.eq(&OneBased)
     }
 
     pub fn is_zero_based(&self) -> bool {
-        *self == CoordinateSystem::LeftOpen
+        self.eq(&ZeroBased)
     }
 
     pub fn start_bound(&self) -> &Bound {
@@ -46,23 +43,24 @@ impl CoordinateSystem {
     }
 
     pub fn start_delta(&self, target: &CoordinateSystem) -> i8 {
-        if target.start_bound() == self.start_bound() {
+        if self.eq(target) {
             return 0;
         }
-        match self.start_bound() {
-            Bound::OPEN => 1,
+
+        match *self {
+            ZeroBased => 1,
             _ => -1
         }
     }
 
-    pub fn end_delta(&self, target: &CoordinateSystem) -> i8 {
-        if target.end_bound() == self.end_bound() {
-            0
-        } else {
-            match self.end_bound() {
-                Bound::OPEN => -1,
-                _ => 1
-            }
+    pub fn length_delta(cs: &CoordinateSystem) -> i8 {
+        ZeroBased.start_delta(cs)
+    }
+
+    pub fn value_of(cs: &CoordinateSystem) -> Self {
+        match cs {
+            OneBased => OneBased,
+            ZeroBased => ZeroBased
         }
     }
 }
@@ -73,55 +71,46 @@ mod test {
     use rstest::rstest;
 
     #[rstest]
-    #[case(CoordinateSystem::FullyClosed, true)]
-    #[case(CoordinateSystem::LeftOpen, false)]
-    fn test_is_one_based(#[case] input: CoordinateSystem, #[case] expected: bool) {
+    #[case(CoordinateSystem::OneBased, true)]
+    #[case(CoordinateSystem::ZeroBased, false)]
+    fn test_is_one_based(#[case] input: CoordinateSystem,
+                         #[case] expected: bool) {
         assert_eq!(input.is_one_based(), expected);
     }
 
     #[rstest]
-    #[case(CoordinateSystem::FullyClosed, false)]
-    #[case(CoordinateSystem::LeftOpen, true)]
-    fn test_is_zero_based(#[case] input: CoordinateSystem, #[case] expected: bool) {
+    #[case(CoordinateSystem::OneBased, false)]
+    #[case(CoordinateSystem::ZeroBased, true)]
+    fn test_is_zero_based(#[case] input: CoordinateSystem,
+                          #[case] expected: bool) {
         assert_eq!(input.is_zero_based(), expected);
     }
 
     #[rstest]
-    #[case(CoordinateSystem::FullyClosed, & Bound::CLOSED)]
-    #[case(CoordinateSystem::LeftOpen, & Bound::OPEN)]
-    #[case(CoordinateSystem::FullyOpen, & Bound::OPEN)]
-    fn test_start_bound(#[case] input: CoordinateSystem, #[case] expected: &Bound) {
+    #[case(CoordinateSystem::OneBased, & Bound::CLOSED)]
+    #[case(CoordinateSystem::ZeroBased, & Bound::OPEN)]
+    fn test_start_bound(#[case] input: CoordinateSystem,
+                        #[case] expected: &Bound) {
         assert_eq!(input.start_bound(), expected)
     }
 
     #[rstest]
-    #[case(CoordinateSystem::FullyClosed, & Bound::CLOSED)]
-    #[case(CoordinateSystem::LeftOpen, & Bound::CLOSED)]
-    #[case(CoordinateSystem::FullyOpen, & Bound::OPEN)]
-    fn test_end_bound(#[case] input: CoordinateSystem, #[case] expected: &Bound) {
+    #[case(CoordinateSystem::OneBased, & Bound::CLOSED)]
+    #[case(CoordinateSystem::ZeroBased, & Bound::CLOSED)]
+    fn test_end_bound(#[case] input: CoordinateSystem,
+                      #[case] expected: &Bound) {
         assert_eq!(input.end_bound(), expected)
     }
 
     #[rstest]
-    #[case(CoordinateSystem::FullyClosed, CoordinateSystem::FullyClosed, 0)]
-    #[case(CoordinateSystem::FullyClosed, CoordinateSystem::LeftOpen, -1)]
-    #[case(CoordinateSystem::FullyClosed, CoordinateSystem::FullyOpen, -1)]
-    #[case(CoordinateSystem::LeftOpen, CoordinateSystem::LeftOpen, 0)]
-    #[case(CoordinateSystem::LeftOpen, CoordinateSystem::FullyClosed, 1)]
-    fn test_start_delta(#[case] current: CoordinateSystem, #[case] target: CoordinateSystem, #[case] expected: i8){
+    #[case(CoordinateSystem::OneBased, CoordinateSystem::OneBased, 0)]
+    #[case(CoordinateSystem::OneBased, CoordinateSystem::ZeroBased, -1)]
+    #[case(CoordinateSystem::ZeroBased, CoordinateSystem::ZeroBased, 0)]
+    #[case(CoordinateSystem::ZeroBased, CoordinateSystem::OneBased, 1)]
+    fn test_start_delta(#[case] current: CoordinateSystem,
+                        #[case] target: CoordinateSystem,
+                        #[case] expected: i8){
         assert_eq!(current.start_delta(&target), expected)
-    }
-
-    #[rstest]
-    #[case(CoordinateSystem::FullyClosed, CoordinateSystem::FullyClosed, 0)]
-    #[case(CoordinateSystem::FullyClosed, CoordinateSystem::LeftOpen, 0)]
-    #[case(CoordinateSystem::FullyClosed, CoordinateSystem::FullyOpen, 1)]
-    #[case(CoordinateSystem::FullyClosed, CoordinateSystem::RightOpen, 1)]
-    #[case(CoordinateSystem::LeftOpen, CoordinateSystem::LeftOpen, 0)]
-    #[case(CoordinateSystem::LeftOpen, CoordinateSystem::FullyClosed, 0)]
-    #[case(CoordinateSystem::FullyOpen, CoordinateSystem::FullyClosed, -1)]
-    fn test_end_delta(#[case] current: CoordinateSystem, #[case] target: CoordinateSystem, #[case] expected: i8) {
-        assert_eq!(current.end_delta(&target), expected)
     }
 
 }

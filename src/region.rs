@@ -1,3 +1,4 @@
+use crate::Contig;
 use crate::default::RegionImprecise;
 use super::confidence_interval::ConfidenceInterval;
 use super::coordinate_system::CoordinateSystem;
@@ -38,22 +39,16 @@ pub trait Region {
         }
     }
 
-    fn end_with_coordinate_system(&self, cs: &CoordinateSystem) -> u32 {
-        let delta = self.coordinate_system().end_delta(cs);
-        match delta {
-            -1 => self.end() - 1,
-            0 => self.end(),
-            1 => self.end() + 1,
-            _ => panic!("Whoa!")
-        }
+    fn end_with_coordinate_system(&self, _cs: &CoordinateSystem) -> u32 {
+        self.end()
     }
+
+    fn with_coordinate_system(&mut self, cs: &CoordinateSystem);
 
     fn contains(&self, other: &dyn Region) -> bool {
         self.start() <= other.start_with_coordinate_system(self.coordinate_system())
             && other.end_with_coordinate_system(self.coordinate_system()) <= self.end()
     }
 
-    // if precise - no-op
-    // if imprecise - set CIs to precise
-    fn as_precise(self) -> Box<dyn Region>;
+    fn invert(&mut self, contig: &dyn Contig);
 }

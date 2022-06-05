@@ -20,12 +20,19 @@ impl GenomicRegionDefault {
 }
 
 impl GenomicRegion for GenomicRegionDefault {
-    fn contig(&self) -> &Rc<dyn Contig> {
-        &self.contig
+    fn contig(&self) -> &dyn Contig {
+        self.contig.as_ref()
     }
 
     fn strand(&self) -> &Strand {
         &self.strand
+    }
+
+    fn with_strand(&mut self, strand: &Strand) {
+        if !self.strand.eq(strand) {
+            self.region.invert(self.contig.as_ref());
+            self.strand = self.strand.opposite();
+        }
     }
 }
 
@@ -50,8 +57,12 @@ impl Region for GenomicRegionDefault {
         self.region.end_confidence_interval()
     }
 
-    fn as_precise(self) -> Box<dyn Region> {
-        self.region.as_precise()
+    fn with_coordinate_system(&mut self, cs: &CoordinateSystem) {
+        self.region.with_coordinate_system(cs);
+    }
+
+    fn invert(&mut self, contig: &dyn Contig) {
+        self.region.invert(contig)
     }
 }
 
@@ -75,7 +86,7 @@ impl Debug for GenomicRegionDefault {
 mod genomic_region_tests {
     use std::rc::Rc;
 
-    use crate::{AssignedMoleculeType, ConfidenceInterval, CoordinateSystem, precise_region, region, SequenceRole, Strand};
+    use crate::{AssignedMoleculeType, ConfidenceInterval, CoordinateSystem, region, SequenceRole, Strand};
     use crate::default::ContigDefault;
 
     use super::GenomicRegionDefault;
@@ -88,7 +99,7 @@ mod genomic_region_tests {
 
         /* WORKS WITH PRECISE OR IMPRECISE */
         // let region = precise_region(CoordinateSystem::LeftOpen, 10, 20);
-        let region = region(CoordinateSystem::LeftOpen,
+        let region = region(CoordinateSystem::ZeroBased,
                             10, ConfidenceInterval::imprecise(5, 10),
                             20, ConfidenceInterval::imprecise(15, 20));
 

@@ -1,4 +1,3 @@
-use std::rc::Rc;
 use super::contig::Contig;
 use super::region::Region;
 use super::strand::Strand;
@@ -15,8 +14,7 @@ pub trait GenomicRegion: Region {
     // We should write `GenomicRegion` trait to describe that it gives some sort of reference (&, Box, or whatever)
 
     // TODO - this is possible, but it introduces an array of lifetimes everywhere
-    // fn contig(&'a self) -> &'a dyn Contig;
-    fn contig(&self) -> &Rc<dyn Contig>;
+    fn contig(&self) -> &dyn Contig;
 
     fn strand(&self) -> &Strand;
 
@@ -26,6 +24,16 @@ pub trait GenomicRegion: Region {
 
     fn contig_name(&self) -> &str {
         self.contig().name()
+    }
+
+    fn with_strand(&mut self, strand: &Strand);
+
+    fn with_positive_strand(&mut self) {
+        self.with_strand(&Strand::Positive)
+    }
+
+    fn with_negative_strand(&mut self) {
+        self.with_strand(&Strand::Negative)
     }
 
 }

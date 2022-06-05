@@ -25,4 +25,21 @@ impl ConfidenceInterval {
     pub fn is_precise(&self) -> bool {
         self.upper_bound == 0 && self.lower_bound == 0
     }
+
+    pub fn to_precise(&mut self) {
+        self.upper_bound = 0;
+        self.lower_bound = 0;
+    }
+
+    /// Swap upper and lower CI bounds.
+    fn swap(&mut self) {
+        std::mem::swap(&mut self.upper_bound, &mut self.lower_bound)
+    }
+
+    /// Swap upper and lower CI bounds in provided CIs and swap the CIs themselves.
+    pub fn swap_and_invert(left: &mut ConfidenceInterval, right: &mut ConfidenceInterval) {
+        left.swap();
+        right.swap();
+        std::mem::swap(left, right);
+    }
 }
