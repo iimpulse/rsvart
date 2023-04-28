@@ -1,9 +1,6 @@
 use crate::Bound;
 
-const LEFT_OPEN_CS: CoordinateSystem = CoordinateSystem::LeftOpen;
-const FULLY_CLOSED_CS: CoordinateSystem = CoordinateSystem::FullyClosed;
-
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Clone, Copy)]
 pub enum CoordinateSystem {
     FullyClosed,
     LeftOpen,
@@ -21,12 +18,12 @@ impl CoordinateSystem {
         }
     }
 
-    pub fn zero_based() -> &'static CoordinateSystem {
-        &LEFT_OPEN_CS
+    pub fn zero_based() -> CoordinateSystem {
+        CoordinateSystem::LeftOpen
     }
 
-    pub fn one_based() -> &'static CoordinateSystem {
-        &FULLY_CLOSED_CS
+    pub fn one_based() -> CoordinateSystem {
+        CoordinateSystem::FullyClosed
     }
 
     pub fn is_one_based(&self) -> bool {

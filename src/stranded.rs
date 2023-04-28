@@ -15,7 +15,7 @@ pub trait Stranded {
     }
 
     fn to_negative_strand(&self) -> Self where Self: Sized {
-        return self.with_strand(Strand::Negative);
+        self.with_strand(Strand::Negative)
     }
 }
 
@@ -31,47 +31,47 @@ mod test {
     }
     impl Stranded for TestStrand {
         fn with_strand(&self, s: Strand) -> TestStrand {
-            return TestStrand {
+            TestStrand {
                 strand: s,       
                 ..*self
             }
         }
 
         fn strand(&self) -> Strand {
-            return self.strand.clone();
+            return self.strand;
         }
     }
 
     #[rstest]
     #[case(Strand::Positive)]
     fn test_with_strand(#[case] expected_strand: Strand){
-        let test_strand = TestStrand { id: 32, strand: Strand::Negative};
-        let new_test_strand = test_strand.with_strand(Strand::Positive);
-        assert_eq!(new_test_strand.strand, expected_strand);
+        let mut test_strand = TestStrand { id: 32, strand: Strand::Negative};
+        test_strand = test_strand.with_strand(Strand::Positive);
+        assert_eq!(test_strand.strand, expected_strand);
     }
 
 
     #[rstest]
     #[case(Strand::Positive)]
     fn test_with_opposite_strand(#[case] expected_strand: Strand){
-        let test_strand = TestStrand { id: 32, strand: Strand::Negative};
-        let new_test_strand = test_strand.with_opposite_strand();
-        assert_eq!(new_test_strand.strand, expected_strand);
+        let mut test_strand = TestStrand { id: 32, strand: Strand::Negative};
+        test_strand = test_strand.with_opposite_strand();
+        assert_eq!(test_strand.strand, expected_strand);
     }
 
     #[rstest]
     #[case(Strand::Positive)]
     fn test_with_positive_strand(#[case] expected_strand: Strand){
-        let test_strand = TestStrand { id: 32, strand: Strand::Negative};
-        let new_test_strand = test_strand.to_positive_strand();
-        assert_eq!(new_test_strand.strand, expected_strand);
+        let mut test_strand = TestStrand { id: 32, strand: Strand::Negative};
+        test_strand = test_strand.to_positive_strand();
+        assert_eq!(test_strand.strand, expected_strand);
     }
 
     #[rstest]
     #[case(Strand::Negative)]
     fn test_with_negative_strand(#[case] expected_strand: Strand){
-        let test_strand = TestStrand { id: 32, strand: Strand::Positive};
-        let new_test_strand = test_strand.to_negative_strand();
-        assert_eq!(new_test_strand.strand, expected_strand);
+        let mut test_strand = TestStrand { id: 32, strand: Strand::Positive};
+        test_strand = test_strand.to_negative_strand();
+        assert_eq!(test_strand.strand, expected_strand);
     }
 }
