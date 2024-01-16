@@ -1,14 +1,6 @@
 use crate::Bound;
 
-const FULLY_CLOSED: (Bound, Bound) = (Bound::CLOSED, Bound::CLOSED);
-const LEFT_OPEN: (Bound, Bound) = (Bound::OPEN, Bound::CLOSED);
-const RIGHT_OPEN: (Bound, Bound) = (Bound::CLOSED, Bound::OPEN);
-const FULLY_OPEN: (Bound, Bound) = (Bound::OPEN, Bound::OPEN);
-
-const LEFT_OPEN_CS: CoordinateSystem = CoordinateSystem::LeftOpen;
-const FULLY_CLOSED_CS: CoordinateSystem = CoordinateSystem::FullyClosed;
-
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Clone, Copy)]
 pub enum CoordinateSystem {
     FullyClosed,
     LeftOpen,
@@ -17,21 +9,21 @@ pub enum CoordinateSystem {
 }
 
 impl CoordinateSystem {
-    fn value(&self) -> &(Bound, Bound) {
-        match self {
-            CoordinateSystem::FullyClosed => &FULLY_CLOSED,
-            CoordinateSystem::LeftOpen => &LEFT_OPEN,
-            CoordinateSystem::RightOpen => &RIGHT_OPEN,
-            CoordinateSystem::FullyOpen => &FULLY_OPEN,
+    fn value(&self) -> (Bound, Bound) {
+        match *self {
+            CoordinateSystem::FullyClosed => (Bound::CLOSED, Bound::CLOSED),
+            CoordinateSystem::LeftOpen => (Bound::OPEN, Bound::CLOSED),
+            CoordinateSystem::RightOpen => (Bound::CLOSED, Bound::OPEN),
+            CoordinateSystem::FullyOpen => (Bound::OPEN, Bound::OPEN),
         }
     }
 
-    pub fn zero_based() -> &'static CoordinateSystem {
-        &LEFT_OPEN_CS
+    pub fn zero_based() -> CoordinateSystem {
+        CoordinateSystem::LeftOpen
     }
 
-    pub fn one_based() -> &'static CoordinateSystem {
-        &FULLY_CLOSED_CS
+    pub fn one_based() -> CoordinateSystem {
+        CoordinateSystem::FullyClosed
     }
 
     pub fn is_one_based(&self) -> bool {
@@ -42,12 +34,12 @@ impl CoordinateSystem {
         *self == CoordinateSystem::LeftOpen
     }
 
-    pub fn start_bound(&self) -> &Bound {
-        &self.value().0
+    pub fn start_bound(&self) -> Bound {
+        self.value().0
     }
 
-    pub fn end_bound(&self) -> &Bound {
-        &self.value().1
+    pub fn end_bound(&self) -> Bound {
+        self.value().1
     }
 
     pub fn start_delta(&self, target: &CoordinateSystem) -> i8 {
@@ -92,18 +84,18 @@ mod test {
     }
 
     #[rstest]
-    #[case(CoordinateSystem::FullyClosed, & Bound::CLOSED)]
-    #[case(CoordinateSystem::LeftOpen, & Bound::OPEN)]
-    #[case(CoordinateSystem::FullyOpen, & Bound::OPEN)]
-    fn test_start_bound(#[case] input: CoordinateSystem, #[case] expected: &Bound) {
+    #[case(CoordinateSystem::FullyClosed, Bound::CLOSED)]
+    #[case(CoordinateSystem::LeftOpen, Bound::OPEN)]
+    #[case(CoordinateSystem::FullyOpen, Bound::OPEN)]
+    fn test_start_bound(#[case] input: CoordinateSystem, #[case] expected: Bound) {
         assert_eq!(input.start_bound(), expected)
     }
 
     #[rstest]
-    #[case(CoordinateSystem::FullyClosed, & Bound::CLOSED)]
-    #[case(CoordinateSystem::LeftOpen, & Bound::CLOSED)]
-    #[case(CoordinateSystem::FullyOpen, & Bound::OPEN)]
-    fn test_end_bound(#[case] input: CoordinateSystem, #[case] expected: &Bound) {
+    #[case(CoordinateSystem::FullyClosed, Bound::CLOSED)]
+    #[case(CoordinateSystem::LeftOpen, Bound::CLOSED)]
+    #[case(CoordinateSystem::FullyOpen, Bound::OPEN)]
+    fn test_end_bound(#[case] input: CoordinateSystem, #[case] expected: Bound) {
         assert_eq!(input.end_bound(), expected)
     }
 
