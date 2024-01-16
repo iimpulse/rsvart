@@ -5,7 +5,7 @@ mod err;
 mod default;
 mod strand;
 mod stranded;
-mod coordinate_systemed;
+// mod coordinate_systemed;
 
 // TODO - think about API structure
 pub use self::bound::*;

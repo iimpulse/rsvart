@@ -4,13 +4,6 @@ pub enum Strand {
     Negative
 }
 impl Strand {
-    fn value(&self) -> char {
-        match self {
-            Strand::Positive => '+',
-            Strand::Negative => '-'
-        }
-    }
-
     pub fn is_positive(&self) -> bool {
         *self == Strand::Positive
     }
@@ -24,6 +17,12 @@ impl Strand {
             Strand::Negative => Strand::Positive,
             Strand::Positive => Strand::Negative
         }
+    }
+}
+impl std::fmt::Display for Strand {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+        let sign: char = match &self.is_positive() { true => '+', _ => '-' };
+        write!(f, "{}", sign)
     }
 }
 
@@ -47,10 +46,10 @@ mod test {
     }
 
     #[rstest]
-    #[case(Strand::Negative, '-')]
-    #[case(Strand::Positive, '+')]
-    fn test_correct_symbol(#[case] input: Strand, #[case] expected: char){
-        assert_eq!(input.value(), expected)
+    #[case(Strand::Negative, "-")]
+    #[case(Strand::Positive, "+")]
+    fn test_correct_symbol(#[case] input: Strand, #[case] expected: String){
+        assert_eq!(format!("{}", input), expected)
     }
 
     #[rstest]
