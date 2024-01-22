@@ -11,10 +11,10 @@ pub enum CoordinateSystem {
 impl CoordinateSystem {
     fn value(&self) -> (Bound, Bound) {
         match *self {
-            CoordinateSystem::FullyClosed => (Bound::CLOSED, Bound::CLOSED),
-            CoordinateSystem::LeftOpen => (Bound::OPEN, Bound::CLOSED),
-            CoordinateSystem::RightOpen => (Bound::CLOSED, Bound::OPEN),
-            CoordinateSystem::FullyOpen => (Bound::OPEN, Bound::OPEN),
+            CoordinateSystem::FullyClosed => (Bound::Closed, Bound::Closed),
+            CoordinateSystem::LeftOpen => (Bound::Open, Bound::Closed),
+            CoordinateSystem::RightOpen => (Bound::Closed, Bound::Open),
+            CoordinateSystem::FullyOpen => (Bound::Open, Bound::Open),
         }
     }
 
@@ -47,7 +47,7 @@ impl CoordinateSystem {
             return 0;
         }
         match self.start_bound() {
-            Bound::OPEN => 1,
+            Bound::Open => 1,
             _ => -1
         }
     }
@@ -57,7 +57,7 @@ impl CoordinateSystem {
             0
         } else {
             match self.end_bound() {
-                Bound::OPEN => -1,
+                Bound::Open => -1,
                 _ => 1
             }
         }
@@ -68,6 +68,12 @@ impl CoordinateSystem {
 mod test {
     use super::*;
     use rstest::rstest;
+
+    #[rstest]
+    fn test_baseness(){
+        assert_eq!(CoordinateSystem::LeftOpen, CoordinateSystem::zero_based());
+        assert_eq!(CoordinateSystem::FullyClosed, CoordinateSystem::one_based());
+    }
 
     #[rstest]
     #[case(CoordinateSystem::FullyClosed, true)]
@@ -84,17 +90,17 @@ mod test {
     }
 
     #[rstest]
-    #[case(CoordinateSystem::FullyClosed, Bound::CLOSED)]
-    #[case(CoordinateSystem::LeftOpen, Bound::OPEN)]
-    #[case(CoordinateSystem::FullyOpen, Bound::OPEN)]
+    #[case(CoordinateSystem::FullyClosed, Bound::Closed)]
+    #[case(CoordinateSystem::LeftOpen, Bound::Open)]
+    #[case(CoordinateSystem::FullyOpen, Bound::Open)]
     fn test_start_bound(#[case] input: CoordinateSystem, #[case] expected: Bound) {
         assert_eq!(input.start_bound(), expected)
     }
 
     #[rstest]
-    #[case(CoordinateSystem::FullyClosed, Bound::CLOSED)]
-    #[case(CoordinateSystem::LeftOpen, Bound::CLOSED)]
-    #[case(CoordinateSystem::FullyOpen, Bound::OPEN)]
+    #[case(CoordinateSystem::FullyClosed, Bound::Closed)]
+    #[case(CoordinateSystem::LeftOpen, Bound::Closed)]
+    #[case(CoordinateSystem::FullyOpen, Bound::Open)]
     fn test_end_bound(#[case] input: CoordinateSystem, #[case] expected: Bound) {
         assert_eq!(input.end_bound(), expected)
     }
@@ -120,5 +126,4 @@ mod test {
     fn test_end_delta(#[case] current: CoordinateSystem, #[case] target: CoordinateSystem, #[case] expected: i8) {
         assert_eq!(current.end_delta(&target), expected)
     }
-
 }

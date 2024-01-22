@@ -3,8 +3,8 @@ use std::fmt::{Display, Formatter};
 
 #[derive(Debug)]
 pub enum SvartError {
-    IllegalValueError(String),
-    Other,
+    IllegalValueError(&'static str),
+    Other
 }
 
 impl Display for SvartError {
@@ -16,19 +16,16 @@ impl Display for SvartError {
     }
 }
 
-impl Error for SvartError {
+#[cfg(test)]
+mod test {
+    use super::*;
+    use rstest::rstest;
 
-    fn description(&self) -> &str {
-        match *self {
-            SvartError::IllegalValueError(ref value) => value,
-            _ => "Other error"
-        }
+    #[rstest]
+    #[case(SvartError::IllegalValueError("Something went wrong."), "Illegal value error: Something went wrong.")]
+    #[case(SvartError::Other, "Other error")]
+    fn test_svart_error(#[case] input: SvartError, #[case] expected: &str){
+        assert_eq!(format!("{}", input), expected)
     }
-
-    fn cause(&self) -> Option<&dyn Error> {
-        // TODO - possibly implement
-        None
-    }
-
 }
 
