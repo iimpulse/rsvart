@@ -1,10 +1,10 @@
 use std::error::Error;
 use std::fmt::{Display, Formatter};
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum SvartError {
     IllegalValueError(&'static str),
-    Other
+    Other,
 }
 
 impl Display for SvartError {
@@ -16,6 +16,8 @@ impl Display for SvartError {
     }
 }
 
+impl Error for SvartError {}
+
 #[cfg(test)]
 mod test {
     use super::*;
@@ -24,7 +26,7 @@ mod test {
     #[rstest]
     #[case(SvartError::IllegalValueError("Something went wrong."), "Illegal value error: Something went wrong.")]
     #[case(SvartError::Other, "Other error")]
-    fn test_svart_error(#[case] input: SvartError, #[case] expected: &str){
+    fn test_svart_error(#[case] input: SvartError, #[case] expected: &str) {
         assert_eq!(format!("{}", input), expected)
     }
 }

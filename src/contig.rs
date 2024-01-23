@@ -4,7 +4,7 @@ use crate::assigned_molecule_type::AssignedMoleculeType;
 use crate::sequence_role::SequenceRole;
 use crate::err::SvartError;
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Contig {
     id: usize,
     name: String,
@@ -16,8 +16,8 @@ pub struct Contig {
     ref_seq_accession: String,
     ucsc_name: String,
 }
-impl Contig {
 
+impl Contig {
     pub fn of(id: usize,
               name: String,
               sequence_role: SequenceRole,
