@@ -1,15 +1,16 @@
 mod bound;
 mod coordinate_system;
-mod contig;
 mod err;
-mod default;
 mod strand;
 mod stranded;
-// mod coordinate_systemed;
+mod sequence_role;
+mod assigned_molecule_type;
+mod contig;
 
-// TODO - think about API structure
 pub use self::bound::*;
 pub use self::coordinate_system::*;
 pub use self::contig::*;
 pub use self::err::*;
 pub use self::strand::*;
+pub use self::sequence_role::*;
+pub use self::assigned_molecule_type::*;

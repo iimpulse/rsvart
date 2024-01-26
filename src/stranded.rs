@@ -47,7 +47,7 @@ mod test {
     fn test_with_strand(#[case] expected_strand: Strand){
         let mut test_strand = TestStrand { id: 32, strand: Strand::Negative};
         test_strand = test_strand.with_strand(Strand::Positive);
-        assert_eq!(test_strand.strand, expected_strand);
+        assert_eq!(test_strand.strand(), expected_strand);
     }
 
 
@@ -56,7 +56,7 @@ mod test {
     fn test_with_opposite_strand(#[case] expected_strand: Strand){
         let mut test_strand = TestStrand { id: 32, strand: Strand::Negative};
         test_strand = test_strand.with_opposite_strand();
-        assert_eq!(test_strand.strand, expected_strand);
+        assert_eq!(test_strand.strand(), expected_strand);
     }
 
     #[rstest]
@@ -64,7 +64,7 @@ mod test {
     fn test_with_positive_strand(#[case] expected_strand: Strand){
         let mut test_strand = TestStrand { id: 32, strand: Strand::Negative};
         test_strand = test_strand.to_positive_strand();
-        assert_eq!(test_strand.strand, expected_strand);
+        assert_eq!(test_strand.strand(), expected_strand);
     }
 
     #[rstest]
@@ -72,6 +72,6 @@ mod test {
     fn test_with_negative_strand(#[case] expected_strand: Strand){
         let mut test_strand = TestStrand { id: 32, strand: Strand::Positive};
         test_strand = test_strand.to_negative_strand();
-        assert_eq!(test_strand.strand, expected_strand);
+        assert_eq!(test_strand.strand(), expected_strand);
     }
 }
