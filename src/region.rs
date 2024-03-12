@@ -1,8 +1,8 @@
 use crate::Contig;
-use crate::default::RegionImprecise;
 use super::confidence_interval::ConfidenceInterval;
 use super::coordinate_system::CoordinateSystem;
-use super::default::RegionPrecise;
+use super::RegionImprecise;
+use super::RegionPrecise;
 
 pub fn region(coordinate_system: CoordinateSystem,
               start: u32,
@@ -50,5 +50,5 @@ pub trait Region {
             && other.end_with_coordinate_system(self.coordinate_system()) <= self.end()
     }
 
-    fn invert(&mut self, contig: &dyn Contig);
+    fn invert(&mut self, contig: &Contig);
 }
