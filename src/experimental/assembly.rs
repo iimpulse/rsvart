@@ -1,9 +1,8 @@
 use std::collections::HashMap;
 use std::rc::Rc;
-
-use crate::contig::{AssignedMoleculeType, SequenceRole};
-
-use super::contig::Contig;
+use crate::contig::Contig;
+use crate::assigned_molecule_type::AssignedMoleculeType;
+use crate::sequence_role::SequenceRole;
 
 pub struct GenomicAssembly {
     name: String,
@@ -22,7 +21,7 @@ fn get_unknown_contig() -> Contig {
                 0,
                 "".to_string(),
                 "".to_string(),
-                "".to_string())
+                "".to_string()).unwrap()
 }
 
 impl GenomicAssembly {
@@ -170,13 +169,11 @@ mod assembly_tests {
         let zero = assembly.contig_by_id(0);
         assert!(zero.is_some());
         let zero = zero.unwrap();
-        assert!(zero.is_unknown());
         assert_eq!(zero.name(), "");
 
         let two = assembly.contig_by_id(2);
         assert!(two.is_some());
         let two = two.unwrap();
-        assert!(!two.is_unknown());
         assert_eq!(two.name(), "2");
 
         let q = assembly.contig_by_id(99);

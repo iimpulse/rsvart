@@ -18,7 +18,7 @@ pub struct Contig {
 }
 
 impl Contig {
-    pub fn of(id: usize,
+    pub fn new(id: usize,
               name: String,
               sequence_role: SequenceRole,
               assigned_molecule: String,
@@ -27,6 +27,7 @@ impl Contig {
               gen_bank_accession: String,
               ref_seq_accession: String,
               ucsc_name: String) -> Result<Contig, SvartError> {
+        
         if id == 0 {
             return Err(SvartError::IllegalValueError("Id 0 is reserved for the unknown contig"));
         }
@@ -123,7 +124,7 @@ mod test {
 
     #[test]
     fn test_contig_from_bad_id() {
-        let contig = Contig::of(
+        let contig = Contig::new(
             0,
             "1".to_string(),
             SequenceRole::AssembledMolecule,
@@ -147,7 +148,7 @@ mod test {
     #[test]
     fn test_cmp() {
         let one = get_contig().unwrap();
-        let two = Contig::of(2, "2".to_string(),
+        let two = Contig::new(2, "2".to_string(),
                              SequenceRole::AssembledMolecule, "2".to_string(),
                              AssignedMoleculeType::Chromosome,
                              123_456,
@@ -160,7 +161,7 @@ mod test {
     }
 
     fn get_contig() -> Result<Contig, SvartError> {
-        Contig::of(
+        Contig::new(
             1,
             "1".to_string(),
             SequenceRole::AssembledMolecule,
