@@ -29,6 +29,5 @@ pub use self::sequence_role::*;
 pub use self::assigned_molecule_type::*;
 pub use self::confidence_interval::*;
 pub use self::region::*;
-pub use self::genomic_region::*;
 pub use self::regioned::*;
 pub use self::contiged::*;
