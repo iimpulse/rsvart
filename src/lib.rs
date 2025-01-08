@@ -1,33 +1,28 @@
-mod bound;
-mod coordinate_system;
 mod err;
-mod strand;
-mod stranded;
-mod sequence_role;
-mod assigned_molecule_type;
-mod contig;
+mod ops;
+mod genomic;
 
 mod region;
-// mod genomic_region;
 mod confidence_interval;
 mod regioned;
 
-// mod experimental;
-mod transposable;
-// mod stranded_regioned;
-// mod stranded_contiged_regioned;
-mod contiged;
-mod coordinates;
-mod cordinate_systemed;
-
-pub use self::bound::*;
-pub use self::coordinate_system::*;
-pub use self::contig::*;
 pub use self::err::*;
-pub use self::strand::*;
-pub use self::sequence_role::*;
-pub use self::assigned_molecule_type::*;
 pub use self::confidence_interval::*;
 pub use self::region::*;
 pub use self::regioned::*;
-pub use self::contiged::*;
+
+pub use ops::contains::*;
+pub use ops::overlaps::*;
+pub use ops::operations::*;
+pub use ops::unit::*;
+pub use ops::spanning::*;
+pub use ops::located::*;
+
+pub use genomic::strand::*;
+pub use genomic::stranded::*;
+pub use genomic::variant::*;
+pub use genomic::variant_type::*;
+pub use genomic::sequence_role::*;
+pub use genomic::assigned_molecule_type::*;
+pub use genomic::contig::*;
+pub use genomic::contiged::*;

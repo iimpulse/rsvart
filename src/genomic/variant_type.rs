@@ -185,13 +185,13 @@ impl VariantType {
 
 #[cfg(test)]
 mod test {
-    use super::*;
+    use crate::{AssignedMoleculeType, Strand};
+    use crate::VariantType;
     use rstest::rstest;
 
     #[rstest]
-    #[case("AT", VariantType::)]
-    #[case(Strand::Negative, false)]
-    fn test_parse_ref_alt(){
-
+    #[case("AT", VariantType::SingleNucleotide)]
+    fn test_parse_ref_alt(#[case] input: &str, #[case] expected: VariantType){
+        
     }
 }

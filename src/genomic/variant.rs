@@ -1,7 +1,6 @@
-use crate::GenomicRegion;
-use crate::variant_type::VariantType;
+use crate::VariantType;
 
-trait Variant: GenomicRegion {
+trait Variant {
 
     fn id(&self) -> &str;
 

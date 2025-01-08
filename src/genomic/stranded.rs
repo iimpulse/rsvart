@@ -1,9 +1,10 @@
 use crate::Strand;
 
-
 pub trait Stranded {
     fn strand(&self) -> Strand;
 }
+
+
 
 #[cfg(test)]
 mod test {
@@ -17,14 +18,14 @@ mod test {
     impl Stranded for TestStrand {
 
         fn strand(&self) -> Strand {
-            return self.strand;
+            self.strand
         }
         
     }
 
     #[rstest]
-    #[case(TestStrand { id: 1, strand: Strand::Positive}, Strand::Positive)]
-    #[case(TestStrand { id: 1, strand: Strand::Negative}, Strand::Negative)]
+    #[case(TestStrand { id: 1, strand: Strand::Forward}, Strand::Forward)]
+    #[case(TestStrand { id: 1, strand: Strand::Reverse}, Strand::Reverse)]
     fn test_is_positive(#[case] input: TestStrand, #[case] expected: Strand) {
         assert_eq!(input.strand(), expected);
     }
