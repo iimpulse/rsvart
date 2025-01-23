@@ -6,4 +6,6 @@ pub mod stranded;
 pub mod strand;
 pub mod contig;
 pub mod contiged;
-mod genome;
+pub mod genome;
+pub mod genomic_region;
+pub mod genomic_regioned;

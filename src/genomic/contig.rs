@@ -1,6 +1,6 @@
 use crate::{AssignedMoleculeType, SequenceRole, Located, Unit};
 
-#[derive(Debug, PartialEq, Eq, PartialOrd, Clone)]
+#[derive(Debug, PartialEq, Eq, PartialOrd, Clone, Ord)]
 pub struct Contig<C> {
     name: String,
     sequence_role: SequenceRole,
@@ -53,7 +53,7 @@ impl<C> Contig<C> where C: Unit {
         gen_bank_accession: String,
         ref_seq_accession: String,
         ucsc_name: String) -> Option<Self> {
-        
+
         if length < C::zero() {
             None
         } else {

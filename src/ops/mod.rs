@@ -6,3 +6,4 @@ pub mod spanning;
 pub mod unit;
 pub mod transposable;
 pub mod operations;
+pub mod func;

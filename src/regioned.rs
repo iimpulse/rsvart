@@ -1,5 +1,3 @@
-use crate::{Region};
+use crate::{Located, Operations};
 
-pub trait Regioned {
-    fn region(&self) -> &Region;
-}
+pub trait Regioned<C>: Located<C> + Operations<C>  {}
