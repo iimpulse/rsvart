@@ -28,5 +28,6 @@ mod test {
     #[case(TestStrand { id: 1, strand: Strand::Reverse}, Strand::Reverse)]
     fn test_is_positive(#[case] input: TestStrand, #[case] expected: Strand) {
         assert_eq!(input.strand(), expected);
+        assert_eq!(input.id, 1)
     }
 }

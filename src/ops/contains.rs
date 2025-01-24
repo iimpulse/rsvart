@@ -6,7 +6,7 @@ pub trait Contains<O = Self> where O: ?Sized,
 #[cfg(test)]
 mod test {
     use rstest::rstest;
-    use crate::{Contains, Located, Spanning};
+    use crate::{Contains, Located};
 
     struct TestRegion {
         start: u8,
