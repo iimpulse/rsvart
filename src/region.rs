@@ -1,7 +1,4 @@
-use crate::{Contains, Located, Operations, Overlaps, Unit};
-use crate::regioned::Regioned;
-use crate::{ops::func::contains, ops::func::overlaps};
-
+use crate::{Located};
 
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub struct Region<C> {
@@ -32,32 +29,11 @@ impl<C> Located<C> for Region<C> {
     }
 }
 
-impl<C> Overlaps for Region<C>
-where
-    C: Unit,
-{
-    fn overlaps(&self, other: &Self) -> bool {
-        overlaps(&self.start, &self.end, &other.start, &other.end)
-    }
-}
-
-impl<C> Contains for Region<C>
-where
-    C: Unit,
-{
-    fn contains(&self, other: &Self) -> bool {
-        contains(self.start(), self.end(), other.start(), other.end())
-    }
-}
-
-impl<C> Operations<C> for Region<C> where C: Unit {}
-impl<C> Regioned<C> for Region<C> where C: Unit {}
-
 
 #[cfg(test)]
 mod test {
     use rstest::rstest;
-    use crate::{Contains, Located, Region, Overlaps};
+    use crate::{Contains, Located, Region, Overlaps, Spanning};
 
     #[rstest]
     #[case(1, 5)]
@@ -71,5 +47,7 @@ mod test {
         assert_eq!(*end_coor, 5);
         assert_eq!(region.contains(&region_other), false);
         assert_eq!(region.overlaps(&region_other), true);
+        assert_eq!(region.span(), 4);
+        assert_eq!(region.is_empty(), false);
     }
 }

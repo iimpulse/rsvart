@@ -1,6 +1,38 @@
-pub trait Contains<O = Self> where O: ?Sized,
+use crate::{Contiged, Located, Stranded, Unit};
+use crate::ops::func::{contains};
+use crate::ops::transposable::Transposable;
+
+pub trait Contains<C, O = Self> where O: ?Sized,
 {
     fn contains(&self, other: &O) -> bool;
+}
+
+impl<C, T> Contains<C> for T where C: Unit, T: Located<C> {
+    fn contains(&self, other: &Self) -> bool {
+        contains(self.start(), self.end(), other.start(), other.end())
+    }
+}
+
+
+pub trait GenomicallyContains<C, O = Self> where O: ?Sized,
+{
+    fn contains(&self, other: &O) -> bool;
+}
+
+impl<C, T> GenomicallyContains<C> for T where C: Unit, T: Located<C> + Stranded + Contiged<C> {
+    fn contains(&self, other: &Self) -> bool {
+        if self.contig().ne(other.contig()) {
+            return false
+        }
+
+        if self.strand().eq(&other.strand()) {
+            return contains(self.start(), self.end(), other.start(), other.end())
+        }
+
+        let other_start = other.start_on_strand(self.strand());
+        let other_end = other.end_on_strand(self.strand());
+        contains(self.start(), self.end(), &other_start, &other_end)
+    }
 }
 
 #[cfg(test)]
@@ -20,12 +52,6 @@ mod test {
 
         fn end(&self) -> &u8 {
             &self.end
-        }
-    }
-
-    impl Contains for TestRegion {
-        fn contains(&self, other: &TestRegion) -> bool {
-            self.start() <= other.start() && other.end() <= self.end()
         }
     }
 

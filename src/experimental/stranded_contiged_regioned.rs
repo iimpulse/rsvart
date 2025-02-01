@@ -1,7 +1,7 @@
 use crate::{Contiged, GenomicRegion, Regioned};
 use crate::stranded::Stranded;
 
-pub trait StrandedContigedRegioned<T, U> {
+pub trait StrandedContigedRegioned<T> {
     fn contains(&self, other: &U) -> bool;
 
     fn overlaps_with(&self, other: &U) -> bool;

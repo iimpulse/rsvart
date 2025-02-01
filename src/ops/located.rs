@@ -1,8 +1,8 @@
 pub trait Located<U> {
     fn start(&self) -> &U;
-
+    
     fn end(&self) -> &U;
-
+    
     fn coordinates(&self) -> (&U, &U) {
         (self.start(), self.end())
     }

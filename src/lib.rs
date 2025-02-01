@@ -3,16 +3,12 @@ mod ops;
 mod genomic;
 
 mod region;
-mod confidence_interval;
-mod regioned;
 
 pub use self::err::*;
-pub use self::confidence_interval::*;
 pub use self::region::*;
 
 pub use ops::contains::*;
 pub use ops::overlaps::*;
-pub use ops::operations::*;
 pub use ops::unit::*;
 pub use ops::spanning::*;
 pub use ops::located::*;
@@ -27,5 +23,4 @@ pub use genomic::sequence_role::*;
 pub use genomic::assigned_molecule_type::*;
 pub use genomic::contig::*;
 pub use genomic::contiged::*;
-pub use genomic::genomic_regioned::*;
 pub use genomic::genomic_region::*;

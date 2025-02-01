@@ -1,6 +1,5 @@
-use crate::{Contains, Contig, Contiged, GenomicRegioned };
-use crate::{Located, Operations, Overlaps, Strand, Stranded, Unit};
-use crate::{ops::func::contains, ops::func::overlaps};
+use crate::{Contig, Contiged};
+use crate::{Located, Strand, Stranded, Unit};
 
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub struct GenomicRegion<'g, C> {
@@ -54,45 +53,19 @@ impl<'g, C> Stranded for GenomicRegion<'g, C> {
     }
 }
 
-impl<'g, C> Overlaps for GenomicRegion<'g, C>
-where
-    C: Unit,
-{
-    fn overlaps(&self, other: &Self) -> bool {
-        if self.contig.eq(other.contig) {
-            overlaps(&self.start, &self.end, &other.start, &other.end)
-        } else {
-            false
-        }
-    }
-}
-
-impl<'g, C> Contains for GenomicRegion<'g, C>
-where
-    C: Unit,
-{
-    fn contains(&self, other: &Self) -> bool {
-        if self.contig.eq(other.contig) {
-            contains(&self.start, &self.end, &other.start, &other.end)
-        } else {
-            false
-        }
-    }
-}
-
-impl<'g, C> Operations<C> for GenomicRegion<'g, C> where C: Unit, {}
-impl<'g, C> GenomicRegioned<C> for GenomicRegion<'g, C> where C: Unit {}
-
-
-
 #[cfg(test)]
 mod test {
-    use std::convert::TryFrom;
     use super::Strand;
     use rstest::rstest;
-    use crate::SvartError;
-    
-    
+    use crate::{AssignedMoleculeType, Contig, GenomicRegion, GenomicallyContains, GenomicallyOverlaps, SequenceRole};
 
-
+    #[rstest]
+    fn test_genomic_region(){
+        let length: u32 = 10000;
+        let contig: Contig<u32> = Contig::new("chr1".to_string(), SequenceRole::AssembledMolecule, "something".to_string(), AssignedMoleculeType::Chromosome, length,"CM061752.1".to_string(), "NM_1234".to_string(), "chr6".to_string()).unwrap();
+        let genomic_region: GenomicRegion<u32> = GenomicRegion::new(&contig, 10, 20, Strand::Forward).unwrap();
+        let genomic_region_1: GenomicRegion<u32> = GenomicRegion::new(&contig, 15, 20, Strand::Forward).unwrap();
+        assert_eq!(genomic_region.contains(&genomic_region_1), true);
+        assert_eq!(genomic_region.overlaps(&genomic_region_1), true);
+    }
 }

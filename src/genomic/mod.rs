@@ -8,4 +8,3 @@ pub mod contig;
 pub mod contiged;
 pub mod genome;
 pub mod genomic_region;
-pub mod genomic_regioned;
