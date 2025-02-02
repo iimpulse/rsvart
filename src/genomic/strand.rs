@@ -1,25 +1,25 @@
-use std::convert::TryFrom;
 use crate::SvartError;
+use std::convert::TryFrom;
 
-#[derive(Debug, Clone, Copy, PartialEq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub enum Strand {
-    Positive,
-    Negative,
+    Forward,
+    Reverse,
 }
 
 impl Strand {
-    pub fn is_positive(&self) -> bool {
-        *self == Strand::Positive
+    pub fn is_forward(&self) -> bool {
+        *self == Strand::Forward
     }
 
-    pub fn is_negative(&self) -> bool {
-        *self == Strand::Negative
+    pub fn is_reverse(&self) -> bool {
+        *self == Strand::Reverse
     }
 
     pub fn opposite(&self) -> Strand {
         match *self {
-            Strand::Negative => Strand::Positive,
-            Strand::Positive => Strand::Negative
+            Strand::Reverse => Strand::Forward,
+            Strand::Forward => Strand::Reverse,
         }
     }
 }
@@ -29,9 +29,11 @@ impl TryFrom<char> for Strand {
 
     fn try_from(value: char) -> Result<Self, Self::Error> {
         match value {
-            '+' => Ok(Strand::Positive),
-            '-' => Ok(Strand::Negative),
-            _ => Err(SvartError::IllegalValueError("Could not parse value for strand."))
+            '+' => Ok(Strand::Forward),
+            '-' => Ok(Strand::Reverse),
+            _ => Err(SvartError::IllegalValueError(
+                "Could not parse value for strand.",
+            )),
         }
     }
 }
@@ -41,18 +43,20 @@ impl TryFrom<&str> for Strand {
 
     fn try_from(value: &str) -> Result<Self, Self::Error> {
         match value.to_uppercase().as_str() {
-            "POS" | "POSITIVE" => Ok(Strand::Positive),
-            "NEG" | "NEGATIVE" => Ok(Strand::Negative),
-            _ => Err(SvartError::IllegalValueError("Could not parse value for strand."))
+            "POS" | "POSITIVE" | "FWD" | "FORWARD" => Ok(Strand::Forward),
+            "NEG" | "NEGATIVE" | "REV" | "REVERSE" => Ok(Strand::Reverse),
+            _ => Err(SvartError::IllegalValueError(
+                "Could not parse value for strand.",
+            )),
         }
     }
 }
 
 impl std::fmt::Display for Strand {
     fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
-        let sign: char = match &self.is_positive() {
+        let sign: char = match &self.is_forward() {
             true => '+',
-            _ => '-'
+            _ => '-',
         };
         write!(f, "{}", sign)
     }
@@ -60,63 +64,69 @@ impl std::fmt::Display for Strand {
 
 #[cfg(test)]
 mod test {
-    use std::convert::TryFrom;
     use super::Strand;
-    use rstest::rstest;
     use crate::SvartError;
+    use rstest::rstest;
+    use std::convert::TryFrom;
 
     #[rstest]
-    #[case(Strand::Positive, true)]
-    #[case(Strand::Negative, false)]
+    #[case(Strand::Forward, true)]
+    #[case(Strand::Reverse, false)]
     fn test_is_positive(#[case] input: Strand, #[case] expected: bool) {
-        assert_eq!(input.is_positive(), expected);
+        assert_eq!(input.is_forward(), expected);
     }
 
     #[rstest]
-    #[case(Strand::Negative, true)]
-    #[case(Strand::Positive, false)]
+    #[case(Strand::Reverse, true)]
+    #[case(Strand::Forward, false)]
     fn test_is_negative(#[case] input: Strand, #[case] expected: bool) {
-        assert_eq!(input.is_negative(), expected);
+        assert_eq!(input.is_reverse(), expected);
     }
 
     #[rstest]
-    #[case(Strand::Negative, "-")]
-    #[case(Strand::Positive, "+")]
+    #[case(Strand::Reverse, "-")]
+    #[case(Strand::Forward, "+")]
     fn test_correct_symbol(#[case] input: Strand, #[case] expected: String) {
         assert_eq!(format!("{}", input), expected)
     }
 
     #[rstest]
-    #[case('-', Strand::Negative)]
-    #[case('+', Strand::Positive)]
+    #[case('-', Strand::Reverse)]
+    #[case('+', Strand::Forward)]
     fn test_correct_strand_char_pass(#[case] input: char, #[case] expected: Strand) {
         assert_eq!(Strand::try_from(input).unwrap(), expected);
     }
 
     #[rstest]
-    #[case(":", SvartError::IllegalValueError("Could not parse value for strand."))]
+    #[case(
+        ":",
+        SvartError::IllegalValueError("Could not parse value for strand.")
+    )]
     fn test_correct_strand_char_fail(#[case] input: char, #[case] expected: SvartError) {
         assert_eq!(Strand::try_from(input).unwrap_err(), expected);
     }
 
     #[rstest]
-    #[case("pos", Strand::Positive)]
-    #[case("neg", Strand::Negative)]
-    #[case("positive", Strand::Positive)]
-    #[case("negative", Strand::Negative)]
+    #[case("pos", Strand::Forward)]
+    #[case("neg", Strand::Reverse)]
+    #[case("positive", Strand::Forward)]
+    #[case("negative", Strand::Reverse)]
     fn test_correct_strand_string_pass(#[case] input: &str, #[case] expected: Strand) {
         assert_eq!(Strand::try_from(input).unwrap(), expected);
     }
 
     #[rstest]
-    #[case("notaastrand", SvartError::IllegalValueError("Could not parse value for strand."))]
+    #[case(
+        "notaastrand",
+        SvartError::IllegalValueError("Could not parse value for strand.")
+    )]
     fn test_correct_strand_string_fail(#[case] input: &str, #[case] expected: SvartError) {
         assert_eq!(Strand::try_from(input).unwrap_err(), expected);
     }
 
     #[rstest]
-    #[case(Strand::Negative, Strand::Positive)]
-    #[case(Strand::Positive, Strand::Negative)]
+    #[case(Strand::Reverse, Strand::Forward)]
+    #[case(Strand::Forward, Strand::Reverse)]
     fn test_opposite_strand(#[case] input: Strand, #[case] expected: Strand) {
         assert_eq!(input.opposite(), expected)
     }
