@@ -17,7 +17,7 @@ impl From<&str> for SequenceRole {
             "FIX-PATCH" => SequenceRole::FixPatch,
             "NOVEL-PATCH" => SequenceRole::NovelPatch,
             "ALT-SCAFFOLD" => SequenceRole::AltScaffold,
-            _ => SequenceRole::Unknown
+            _ => SequenceRole::Unknown,
         }
     }
 }
@@ -34,7 +34,7 @@ mod test {
     #[case("fix-patch", SequenceRole::FixPatch)]
     #[case("novel-patch", SequenceRole::NovelPatch)]
     #[case("alt-scaffold", SequenceRole::AltScaffold)]
-    #[case("fake-nothing", SequenceRole::Unknown )]
+    #[case("fake-nothing", SequenceRole::Unknown)]
     fn test_sequence_role_from(#[case] input: &str, #[case] expected: SequenceRole) {
         assert_eq!(SequenceRole::from(input), expected);
     }

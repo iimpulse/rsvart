@@ -31,7 +31,7 @@ pub enum VariantType {
     CopyNumberLOH,
     CopyNumberComplex,
     ShortTandemRepeat,
-    Translocation
+    Translocation,
 }
 impl VariantType {
     pub fn parse_type_vcf(alt: &str) -> VariantType {
@@ -69,7 +69,7 @@ impl VariantType {
 
             "CNV:GAIN" => VariantType::CopyNumberGain,
             "CNV:LOSS" => VariantType::CopyNumberLoss,
-            &_ => VariantType::Unknown
+            &_ => VariantType::Unknown,
         };
 
         if variant_type == VariantType::Unknown {
@@ -93,13 +93,13 @@ impl VariantType {
                 VariantType::Symbolic
             } else {
                 VariantType::Unknown
-            }
+            };
         }
         return variant_type;
     }
 
-    pub fn parse_type(refr: &str, alt: &str) -> VariantType{
-        if VariantType::is_symbolic_alleles(refr, alt){
+    pub fn parse_type(refr: &str, alt: &str) -> VariantType {
+        if VariantType::is_symbolic_alleles(refr, alt) {
             return VariantType::parse_type_vcf(alt);
         }
 
@@ -110,7 +110,11 @@ impl VariantType {
             return VariantType::MultiNucleotide;
         }
 
-        return if refr.len() < alt.len() {VariantType::Insertion} else {VariantType::Deletion}
+        return if refr.len() < alt.len() {
+            VariantType::Insertion
+        } else {
+            VariantType::Deletion
+        };
     }
 
     pub fn is_symbolic_alleles(refr: &str, alt: &str) -> bool {
@@ -126,11 +130,13 @@ impl VariantType {
     }
 
     pub fn is_large_symbolic(allele: &str) -> bool {
-        return allele.len() > 1 && (allele.chars().next().unwrap() == '<' || allele.chars().last().unwrap() == '>');
+        return allele.len() > 1
+            && (allele.chars().next().unwrap() == '<' || allele.chars().last().unwrap() == '>');
     }
 
     pub fn is_single_breakend(allele: &str) -> bool {
-        return allele.len() > 1 && (allele.chars().next().unwrap() == '.' || allele.chars().last().unwrap() == '.');
+        return allele.len() > 1
+            && (allele.chars().next().unwrap() == '.' || allele.chars().last().unwrap() == '.');
     }
 
     pub fn is_mated_breakend(allele: &str) -> bool {
@@ -148,13 +154,16 @@ impl VariantType {
 
     pub fn require_symbolic(alt: &str) -> &str {
         if alt.is_empty() || !VariantType::is_large_symbolic(alt) {
-            panic!("Illegal non-symbolic or breakend alt allele {item}", item = alt);
+            panic!(
+                "Illegal non-symbolic or breakend alt allele {item}",
+                item = alt
+            );
         }
         alt
     }
 
     pub fn require_breakend(alt: &str) -> &str {
-        if alt.is_empty() || !VariantType::is_breakend(alt){
+        if alt.is_empty() || !VariantType::is_breakend(alt) {
             panic!("Illegal non-breakend allele {item}", item = alt);
         }
         alt
@@ -168,7 +177,7 @@ impl VariantType {
     }
 
     pub fn is_missing_upstream_deletion(allele: &str) -> bool {
-            return allele.eq("*")
+        return allele.eq("*");
     }
 
     pub fn is_missing(allele: &str) -> bool {
@@ -177,7 +186,7 @@ impl VariantType {
 
     fn trim_angle_brackets(value: &str) -> &str {
         if value.starts_with("<") && value.ends_with(">") {
-            return &value[1..value.len()-1]
+            return &value[1..value.len() - 1];
         }
         value
     }
@@ -185,13 +194,10 @@ impl VariantType {
 
 #[cfg(test)]
 mod test {
-    use crate::{AssignedMoleculeType, Strand};
-    use crate::VariantType;
+    use super::VariantType;
     use rstest::rstest;
 
     #[rstest]
     #[case("AT", VariantType::SingleNucleotide)]
-    fn test_parse_ref_alt(#[case] input: &str, #[case] expected: VariantType){
-        
-    }
+    fn test_parse_ref_alt(#[case] input: &str, #[case] expected: VariantType) {}
 }

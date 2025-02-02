@@ -1,4 +1,5 @@
-use crate::{AssignedMoleculeType, SequenceRole, Located, Unit};
+use crate::genomic::{AssignedMoleculeType, SequenceRole};
+use crate::ops::{Located, Unit};
 
 #[derive(Debug, PartialEq, Eq, PartialOrd, Clone, Ord)]
 pub struct Contig<C> {
@@ -43,8 +44,11 @@ impl<C> Contig<C> {
     }
 }
 
-impl<C> Contig<C> where C: Unit {
-    pub fn new (
+impl<C> Contig<C>
+where
+    C: Unit,
+{
+    pub fn new(
         name: String,
         sequence_role: SequenceRole,
         assigned_molecule: String,
@@ -52,8 +56,8 @@ impl<C> Contig<C> where C: Unit {
         length: C,
         gen_bank_accession: String,
         ref_seq_accession: String,
-        ucsc_name: String) -> Option<Self> {
-
+        ucsc_name: String,
+    ) -> Option<Self> {
         if length < C::zero() {
             None
         } else {
@@ -72,7 +76,10 @@ impl<C> Contig<C> where C: Unit {
     }
 }
 
-impl<C> Located<C> for Contig<C> where C: Unit {
+impl<C> Located<C> for Contig<C>
+where
+    C: Unit,
+{
     fn start(&self) -> &C {
         &self.start
     }
@@ -95,7 +102,10 @@ mod test {
         assert_eq!(contig.name(), "1");
         assert_eq!(contig.sequence_role(), &SequenceRole::AssembledMolecule);
         assert_eq!(contig.assigned_molecule(), "1");
-        assert_eq!(contig.assigned_molecule_type(), &AssignedMoleculeType::Chromosome);
+        assert_eq!(
+            contig.assigned_molecule_type(),
+            &AssignedMoleculeType::Chromosome
+        );
         assert_eq!(contig.gen_bank_accession(), "CM000663.1");
         assert_eq!(contig.ref_seq_accession(), "NC_000001.10");
         assert_eq!(contig.ucsc_name(), "chr1");
@@ -111,13 +121,17 @@ mod test {
     #[test]
     fn test_cmp() {
         let one = get_contig().unwrap();
-        let two = Contig::new("2".to_string(),
-                             SequenceRole::AssembledMolecule, "2".to_string(),
-                             AssignedMoleculeType::Chromosome,
-                             123_456,
-                             "".to_string(),
-                             "".to_string(),
-                             "".to_string()).unwrap();
+        let two = Contig::new(
+            "2".to_string(),
+            SequenceRole::AssembledMolecule,
+            "2".to_string(),
+            AssignedMoleculeType::Chromosome,
+            123_456,
+            "".to_string(),
+            "".to_string(),
+            "".to_string(),
+        )
+        .unwrap();
         assert_ne!(one, two);
         assert!(one < two);
         assert!(two > one);
@@ -132,6 +146,7 @@ mod test {
             249_250_621,
             "CM000663.1".to_string(),
             "NC_000001.10".to_string(),
-            "chr1".to_string())
+            "chr1".to_string(),
+        )
     }
 }

@@ -1,10 +1,8 @@
-use crate::Strand;
+use super::Strand;
 
 pub trait Stranded {
     fn strand(&self) -> Strand;
 }
-
-
 
 #[cfg(test)]
 mod test {
@@ -13,14 +11,12 @@ mod test {
 
     struct TestStrand {
         id: u16,
-        strand: Strand
+        strand: Strand,
     }
     impl Stranded for TestStrand {
-
         fn strand(&self) -> Strand {
             self.strand
         }
-        
     }
 
     #[rstest]

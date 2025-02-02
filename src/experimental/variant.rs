@@ -1,7 +1,6 @@
-use crate::VariantType;
+use super::VariantType;
 
 trait Variant {
-
     fn id(&self) -> &str;
 
     fn reference(&self) -> &str;

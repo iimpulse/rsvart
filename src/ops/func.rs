@@ -1,4 +1,4 @@
-use crate::Unit;
+use crate::ops::Unit;
 
 #[inline(always)]
 pub fn is_empty<C>(start: &C, end: &C) -> bool
@@ -31,7 +31,7 @@ where
 // #[inline(always)]
 // fn distance<C>(a_start: &C, a_end: &C, b_start: &C, b_end: &C) -> DirectedDistance<C>
 // where
-//     C: Unit, 
+//     C: Unit,
 // {
 //     if overlaps_with(a_start, a_end, b_start, b_end) {
 //         DirectedDistance::Overlaps

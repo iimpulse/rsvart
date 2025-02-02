@@ -1,4 +1,4 @@
-use crate::Contig;
+use super::Contig;
 
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub struct GenomeBuildIdentifier {
@@ -63,10 +63,10 @@ impl<C> GenomeBuild<C> {
 
 #[cfg(test)]
 mod test {
-    use super::GenomeBuildIdentifier;
     use super::GenomeBuild;
+    use super::GenomeBuildIdentifier;
+    use crate::genomic::{AssignedMoleculeType, Contig, SequenceRole};
     use rstest::rstest;
-    use crate::{AssignedMoleculeType, Contig, SequenceRole};
 
     #[rstest]
     fn test_genome_build_identifier() {
@@ -78,43 +78,60 @@ mod test {
     #[rstest]
     fn test_genome_build() {
         let id = GenomeBuildIdentifier::new("GRCh38".to_string(), "p13".to_string());
-        let contigs:Vec<Contig<u8>> = get_few_contigs();
+        let contigs: Vec<Contig<u8>> = get_few_contigs();
         let build = GenomeBuild::new(id, contigs);
         assert_eq!(build.id().major_assembly(), "GRCh38");
         assert_eq!(build.id().patch(), "p13");
         assert_eq!(build.contigs().len(), 3);
-        assert_eq!(*build.contig_from_genbank("CM000664.1").unwrap(), *&build.contigs()[1]);
-        assert_eq!(*build.contig_from_refseq("NC_000001.10").unwrap(), *&build.contigs()[0]);
-        assert_eq!(*build.contig_from_ucsc("chr3").unwrap(), *&build.contigs()[2]);
+        assert_eq!(
+            *build.contig_from_genbank("CM000664.1").unwrap(),
+            *&build.contigs()[1]
+        );
+        assert_eq!(
+            *build.contig_from_refseq("NC_000001.10").unwrap(),
+            *&build.contigs()[0]
+        );
+        assert_eq!(
+            *build.contig_from_ucsc("chr3").unwrap(),
+            *&build.contigs()[2]
+        );
     }
 
-    fn get_few_contigs() -> Vec<Contig<u8>>{
-        vec![Contig::new(
-            "1".to_string(),
-            SequenceRole::AssembledMolecule,
-            "1".to_string(),
-            AssignedMoleculeType::Chromosome,60,
-            "CM000663.1".to_string(),
-            "NC_000001.10".to_string(),
-            "chr1".to_string())
-            .unwrap(), Contig::new(
-            "2".to_string(),
-            SequenceRole::AssembledMolecule,
-            "2".to_string(),
-            AssignedMoleculeType::Chromosome,60,
-            "CM000664.1".to_string(),
-            "NC_000002.10".to_string(),
-            "chr2".to_string())
-            .unwrap(), Contig::new(
-            "3".to_string(),
-            SequenceRole::AssembledMolecule,
-            "3".to_string(),
-            AssignedMoleculeType::Chromosome,60,
-            "CM000665.1".to_string(),
-            "NC_000003.10".to_string(),
-            "chr3".to_string())
-            .unwrap()]
+    fn get_few_contigs() -> Vec<Contig<u8>> {
+        vec![
+            Contig::new(
+                "1".to_string(),
+                SequenceRole::AssembledMolecule,
+                "1".to_string(),
+                AssignedMoleculeType::Chromosome,
+                60,
+                "CM000663.1".to_string(),
+                "NC_000001.10".to_string(),
+                "chr1".to_string(),
+            )
+            .unwrap(),
+            Contig::new(
+                "2".to_string(),
+                SequenceRole::AssembledMolecule,
+                "2".to_string(),
+                AssignedMoleculeType::Chromosome,
+                60,
+                "CM000664.1".to_string(),
+                "NC_000002.10".to_string(),
+                "chr2".to_string(),
+            )
+            .unwrap(),
+            Contig::new(
+                "3".to_string(),
+                SequenceRole::AssembledMolecule,
+                "3".to_string(),
+                AssignedMoleculeType::Chromosome,
+                60,
+                "CM000665.1".to_string(),
+                "NC_000003.10".to_string(),
+                "chr3".to_string(),
+            )
+            .unwrap(),
+        ]
     }
 }
-
-

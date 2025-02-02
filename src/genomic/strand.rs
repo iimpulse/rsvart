@@ -1,10 +1,10 @@
-use std::convert::TryFrom;
 use crate::SvartError;
+use std::convert::TryFrom;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub enum Strand {
     Forward,
-    Reverse
+    Reverse,
 }
 
 impl Strand {
@@ -19,7 +19,7 @@ impl Strand {
     pub fn opposite(&self) -> Strand {
         match *self {
             Strand::Reverse => Strand::Forward,
-            Strand::Forward => Strand::Reverse
+            Strand::Forward => Strand::Reverse,
         }
     }
 }
@@ -31,7 +31,9 @@ impl TryFrom<char> for Strand {
         match value {
             '+' => Ok(Strand::Forward),
             '-' => Ok(Strand::Reverse),
-            _ => Err(SvartError::IllegalValueError("Could not parse value for strand."))
+            _ => Err(SvartError::IllegalValueError(
+                "Could not parse value for strand.",
+            )),
         }
     }
 }
@@ -43,7 +45,9 @@ impl TryFrom<&str> for Strand {
         match value.to_uppercase().as_str() {
             "POS" | "POSITIVE" | "FWD" | "FORWARD" => Ok(Strand::Forward),
             "NEG" | "NEGATIVE" | "REV" | "REVERSE" => Ok(Strand::Reverse),
-            _ => Err(SvartError::IllegalValueError("Could not parse value for strand."))
+            _ => Err(SvartError::IllegalValueError(
+                "Could not parse value for strand.",
+            )),
         }
     }
 }
@@ -52,7 +56,7 @@ impl std::fmt::Display for Strand {
     fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
         let sign: char = match &self.is_forward() {
             true => '+',
-            _ => '-'
+            _ => '-',
         };
         write!(f, "{}", sign)
     }
@@ -60,10 +64,10 @@ impl std::fmt::Display for Strand {
 
 #[cfg(test)]
 mod test {
-    use std::convert::TryFrom;
     use super::Strand;
-    use rstest::rstest;
     use crate::SvartError;
+    use rstest::rstest;
+    use std::convert::TryFrom;
 
     #[rstest]
     #[case(Strand::Forward, true)]
@@ -94,7 +98,10 @@ mod test {
     }
 
     #[rstest]
-    #[case(":", SvartError::IllegalValueError("Could not parse value for strand."))]
+    #[case(
+        ":",
+        SvartError::IllegalValueError("Could not parse value for strand.")
+    )]
     fn test_correct_strand_char_fail(#[case] input: char, #[case] expected: SvartError) {
         assert_eq!(Strand::try_from(input).unwrap_err(), expected);
     }
@@ -109,7 +116,10 @@ mod test {
     }
 
     #[rstest]
-    #[case("notaastrand", SvartError::IllegalValueError("Could not parse value for strand."))]
+    #[case(
+        "notaastrand",
+        SvartError::IllegalValueError("Could not parse value for strand.")
+    )]
     fn test_correct_strand_string_fail(#[case] input: &str, #[case] expected: SvartError) {
         assert_eq!(Strand::try_from(input).unwrap_err(), expected);
     }

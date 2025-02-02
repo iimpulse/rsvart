@@ -1,4 +1,4 @@
-use crate::{Located};
+use crate::ops::Located;
 
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub struct Region<C> {
@@ -29,11 +29,11 @@ impl<C> Located<C> for Region<C> {
     }
 }
 
-
 #[cfg(test)]
 mod test {
+    use crate::ops::{Contains, Located, Overlaps, Spanning};
+    use crate::Region;
     use rstest::rstest;
-    use crate::{Contains, Located, Region, Overlaps, Spanning};
 
     #[rstest]
     #[case(1, 5)]
