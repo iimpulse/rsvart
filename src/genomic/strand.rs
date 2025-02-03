@@ -54,11 +54,10 @@ impl TryFrom<&str> for Strand {
 
 impl std::fmt::Display for Strand {
     fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
-        let sign: char = match &self.is_forward() {
-            true => '+',
-            _ => '-',
-        };
-        write!(f, "{}", sign)
+        match *self {
+            Strand::Forward => write!(f, "+"),
+            Strand::Reverse => write!(f, "-"),
+        }
     }
 }
 
